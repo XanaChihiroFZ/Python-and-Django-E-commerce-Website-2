@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Pink Bags{% endblock %}
+    
+  {% block content %}
+   
+    <div class="hero">
+      <div class="glide" id="glide_1">
+        <div class="glide__track" data-glide-el="track">
+          <ul class="glide__slides">
+            <li class="glide__slide">
+              <div class="center">
+                <div class="left">
+                  <h2>New Collection 2025</h2>
+                  <h1 class="">NEW COLLECTION!</h1>
+                  <p>2025 plant collection</p>
+                  <a href="#category" class="hero-btn">SHOP NOW</a>
+                </div>
+                <div class="right">
+                    <img class="img1" src="{% static 'images/main-pic1.png' %}">
+                </div>
+              </div>
+            </li>
+            <li class="glide__slide">
+              <div class="center">
+                <div class="left">
+                  <h2>New Plants 2025</h2>
+                  <h1>BEST SELLER!</h1>
+                  <p>2025 plant collection</p>
+                  <a href="#category" class="hero-btn">SHOP NOW</a>
+                </div>
+                <div class="right">
+                  <img class="img2" src="{% static 'images/main-pic2.png' %}">
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div> 
+  </header>
+    <!-- Categories Section -->
+    <section class="section category">
+      <div id="category" class="title">
+          <h1>CATEGORIES</h1>
+          <p>Shop or search your desired plants or pots</p>
+        </div>
+      <div class="cat-center">
+        <div class="cat">
+          <img src="{% static 'images/cat-1.jpg' %}">
+          <div>
+            <a href="{% url 'product' %}">
+            <p>PLANTS</p>
+          </a>
+          </div>
+        </div>
+        <div class="cat">
+          <img src="{% static 'images/cat-2.jpg' %}">
+          <div>
+            <a href="{% url 'product' %}">
+            <p>POTS</p>
+          </a>
+          </div>
+        </div>
+        <div class="cat">
+          <img src="{% static 'images/cat-3.jpeg' %}">
+          <div>
+            <a href="{% url 'product' %}">
+            <p>TOOLS</p>
+          </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending -->
+<section class="trendy">
+  <div class="title">
+    <h1>TRENDING</h1>
+    <p>All the latest selected by our specialists</p>
+  </div>
+  <div class="product-center">
+    {% for product in trending_products %}
+    <div class="product-item">
+      <div class="overlay">
+        <!-- Dynamic product detail URL -->
+        <a href="{% url 'product_details' product.id %}" class="product-thumb">
+          <!-- Dynamic product image -->
+          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        </a>
+        {% if product.discount %}
+        <span class="discount">{{ product.discount }}%</span>
+        {% endif %}
+      </div>
+      <div class="product-info">
+        <!-- Dynamic category name -->
+        <span>{{ product.category.name|upper }}</span>
+        <!-- Dynamic product name -->
+        <a href="{% url 'product_details' product.id %}">{{ product.name }}</a>
+        <!-- Dynamic product price -->
+        <h4>${{ product.price }}</h4>
+      </div>
+      <ul class="icons">
+        {% if user.is_authenticated %}
+        <!-- Logged-in users can update the cart -->
+        <li><i data-product="{{ product.id }}" data-action="add" class="bx bx-cart update_cart"></i></li>
+        {% else %}
+        <!-- Non-logged-in users are redirected to login page -->
+        <li>
+          <a href="{% url 'login' %}">
+            <i class="bx bx-cart"></i>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+
+
+    <!-- Promo Banner -->
+
+<section id="promotion"class="section banner">
+<div class="left">
+  <h2>New Plant Collection</h2s>
+  <h1>Bangladesh 2025</h1>
+  <p>New Arrival <span class="color">Sale 50% OFF</span> Limited Time Offer</p>
+  <a href="#category" class="btn btn-1">Discover Now</a>
+</div>
+<div class="right">
+  <img src="{% static 'images/banner.jpg' %}" >
+</div>
+    </section>
+
+    <!-- Featured -->
+  
+    <section class="featured">
+      <div id="topbrands" class="title">
+        <h1>Featured</h1>
+        <p>All the latest picked from specialists around the world</p>
+      </div>
+
+      <div class="product-center">
+        {% for product in on_sale_products %}
+        <div class="product-item">
+            <div class="overlay">
+                <!-- Dynamic product detail URL -->
+                <a href="{% url 'product_details' product.id %}" class="product-thumb">
+                    <!-- Dynamic product image -->
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                </a>
+                {% if product.discount %}
+                <span class="discount">{{ product.discount }}%</span>
+                {% endif %}
+            </div>
+            <div class="product-info">
+                <!-- Dynamic category name -->
+                <span>{{ product.category.name|upper }}</span>
+                <!-- Dynamic product name -->
+                <a href="{% url 'product_details' product.id %}">{{ product.name }}</a>
+                <!-- Dynamic product price -->
+                <h4>${{ product.price }}</h4>
+            </div>
+            <ul class="icons">
+              {% if user.is_authenticated %}
+              <!-- Logged-in users can update the cart -->
+              <li><i data-product="{{ product.id }}" data-action="add" class="bx bx-cart update_cart"></i></li>
+              {% else %}
+              <!-- Non-logged-in users are redirected to login page -->
+              <li>
+                <a href="{% url 'login' %}">
+                  <i class="bx bx-cart"></i>
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+    </section>
+   
+    {% endblock %}
+
+    {% block extra_head %}
+    <!-- Glide.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.4.1/css/glide.core.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.4.1/css/glide.theme.css">
+    {% endblock %}
+
+   {% block extra_js %}
+   <!-- Glide.js JS -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.4.1/glide.min.js"></script>
+   <script src="{% static 'js/slider.js' %}"></script>
+   <script src="{% static 'js/index.js' %}"></script>
+   <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+   {% endblock %}

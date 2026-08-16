@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Boxicons -->
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
+    <!-- Custom StyleSheet -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo.jpg' %}">
+
+    <script type="text/javascript">
+      var user = '{{request.user}}'
+      function getToken(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getToken('csrftoken')
+  </script>
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header" id="header">
+      <!-- Top Nav -->
+      <div class="top-nav">
+        <div id="phone" class="container d-flex">
+          <p>Order Online Or Call Us: (+880) 2222-55555</p>
+          <br />
+          <p>Email: greenplants@gmail.com</p>
+        </div>
+      </div>
+      <div class="navigation">
+        <div class="nav-center container d-flex">
+        <img class=logo-pic src="{% static 'images/logo.jpg' %}" alt="Green Plants Logo">
+        <a class="logo"><h1>Green Plants</h1></a>
+
+          <ul class="nav-list d-flex">
+            <li class="nav-item">
+             <a href="{% url 'index' %}">
+              <button  class="nav-link">Home</button>
+              </a>
+            </li>
+            <li class="nav-item">
+            <a href="{% url 'index' %}#category">
+              <button class="nav-link" >Shop</button>
+              </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'terms' %}">
+            <button  class="nav-link">Terms</button>
+            </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'about' %}">
+              <button  class="nav-link">About</button>
+            </a>
+            </li>
+            <li class="nav-item">
+            <a href="#contact">
+              <button  class="nav-link">Contact</button>
+            </a>
+            </li>
+          </ul>
+
+          <div class="icons d-flex">
+            <a href="{% url 'login' %}" class="icon">
+              <i class="bx bx-user"></i>
+            </a>
+            <div class="icon">
+            <a href="{% url 'index' %}#category" class="icon">
+              <i class="bx bx-search"></i>
+            </a>
+            </div>
+            <a href="{% url 'cart' %}" class="icon">
+              <i class="bx bx-cart"></i>
+              <span class="d-flex">
+                <p id="cart-total">{{cartItems}}</p>
+              </span>
+            </a>
+          </div>
+
+          <div class="hamburger">
+            <i class="bx bx-menu-alt-left"></i>
+          </div>
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a href="{% url 'logout' %}">
+             <button  class="nav-link">Log Out</button>
+             </a>
+           </li>
+          {% endif %}
+
+        </div>
+      </div>
+    <div >
+        {% block content %}{% endblock %}
+    </div>
+    </header>
+     <!-- Contact -->
+     <section class="section contact">
+      <div id="contact" class="row" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+        <div class="col" style="max-width: 600px; margin: 0 auto;">
+          <h2>EXCELLENT SUPPORT</h2>
+          <p style="margin: 10px auto; text-align: center; line-height: 1.6;">We love our customers and they can reach us any time
+            of day. We will be at your service 24/7.
+          </p>
+          <a href="#phone" class="btn btn-1" style="display: inline-block; margin-top: 15px;">Contact</a>
+        </div>
+      </div>
+    </section>
+    
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="row">
+        <div class="col d-flex">
+          <h4>INFORMATION</h4>
+          <a href="{% url 'about' %}">About us</a>
+          <a href="#phone">Contact Us</a>
+          <a href="{% url 'terms' %}#terms">Term & Conditions</a>
+          <a href="{% url 'terms' %}#shippingguide">Shipping Guide</a>
+        </div>
+        <div class="col d-flex">
+          <h4>USEFUL LINK</h4>
+          <a href="{% url 'index' %}#category">Online Store</a>
+          <a href="#phone">Customer Services</a>
+          <a href="{% url 'index' %}#promotion">Promotion</a>
+          <a href="{% url 'index' %}#topbrands">Top Brands</a>
+        </div>
+        <div class="col d-flex">
+          <span><i class='bx bxl-facebook-square'></i></span>
+          <span><i class='bx bxl-instagram-alt' ></i></span>
+          <span><i class='bx bxl-github' ></i></span>
+          <span><i class='bx bxl-twitter' ></i></span>
+          <span><i class='bx bxl-pinterest' ></i></span>
+        </div>
+      </div>
+    </footer>
+    {% block extra_js %}{% endblock %}
+  </body>
+ 
+</html>

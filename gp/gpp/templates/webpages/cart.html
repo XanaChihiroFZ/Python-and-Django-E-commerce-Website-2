@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Cart{% endblock %}
+    
+  {% block content %}
+
+    <!-- Cart Items -->
+<div class="container cart">
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>
+          <div class="cart-info">
+            <img src="{{ item.product.image.url }}">
+            <div>
+              <p>{{ item.product.name }}</p>
+              <span>Price: ${{ item.product.price }}</span> <br />
+              <a href="{% url 'remove_from_cart' item.id %}">remove</a>
+            </div>
+          </div>
+        </td>
+        <td>
+          <span class="quantity-text" data-item-id="{{ item.id }}">{{ item.quantity }}</span>
+      </td>
+        <td>${{ item.total_price }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="total-price">
+    <table>
+      <tr>
+        <td>Subtotal</td>
+        <td>${{ subtotal }}</td>
+      </tr>
+      <tr>
+        <td>Tax</td>
+        <td>${{ tax }}</td>
+      </tr>
+      <tr>
+        <td>Total</td>
+        <td>${{ grand_total }}</td>
+      </tr>
+    </table>
+    <a href="{% url 'checkout' %}" class="checkout btn">Proceed To Checkout</a>
+  </div>  
+</div>
+
+
+    <!-- Latest Products -->
+    <section class="section featured">
+      <div class="top container">
+        <h1>Related Products</h1>
+        <a href="{% url 'product' %}" class="view-more">View more</a>
+      </div>
+      <div class="product-center container">
+        {% for product in random_products %}
+          <div class="product-item">
+              <div class="overlay">
+                  <!-- Dynamic product detail URL -->
+                  <a href="{% url 'product_details' product.id %}" class="product-thumb">
+                      <!-- Dynamic product image -->
+                      <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                  </a>
+                  {% if product.discount %}
+                  <span class="discount">{{ product.discount }}%</span>
+                  {% endif %}
+              </div>
+              <div class="product-info">
+                  <!-- Dynamic category name -->
+                  <span>{{ product.category.name|upper }}</span>
+                  <!-- Dynamic product name -->
+                  <a href="{% url 'product_details' product.id %}">{{ product.name }}</a>
+                  <!-- Dynamic product price -->
+                  <h4>${{ product.price }}</h4>
+              </div>
+              <ul class="icons">
+                  <li><i data-product="{{product.id}}" data-action="add" class="bx bx-cart update_cart"></i></li>
+              </ul>
+          </div>
+          {% endfor %}
+      </div>
+    </section>
+    
+    {% endblock %}
+    {% block extra_js %}
+    <script src="{% static 'js/index.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+    <script type="text/javascript">
+      var shipping = '{{ order.shipping }}'; // Ensure 'order' is passed from the backend
+  
+      if (shipping === 'False') {
+          // Hide the "Proceed to Checkout" button if shipping is False
+          document.querySelector('.checkout').style.display = 'none';
+      }
+  </script>
+  
+    {% endblock %}
+    

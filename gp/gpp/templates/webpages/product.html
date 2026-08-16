@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Products{% endblock %}
+    
+  {% block content %}
+    <!-- All Products -->
+    <section class="section all-products" id="products">
+      <div class="top container">
+        <h1>All Products</h1>
+      </div>
+      <div class="product-center container">
+        {% for product in products %}
+        <div class="product-item">
+            <div class="overlay">
+                <!-- Dynamic product detail URL -->
+                <a href="{% url 'product_details' product.id %}" class="product-thumb">
+                    <!-- Dynamic product image -->
+                    <img src="{{ product.image.url }}">
+                </a>
+                {% if product.discount %}
+                <span class="discount">{{ product.discount }}%</span>
+                {% endif %}
+            </div>
+            <div class="product-info">
+                <!-- Dynamic category name -->
+                <span>{{ product.category.name|upper }}</span>
+                <!-- Dynamic product name -->
+                <a href="{% url 'product_details' product.id %}">{{ product.name }}</a>
+                <!-- Dynamic product price -->
+                <h4>${{ product.price }}</h4>
+            </div>
+            <ul class="icons">
+              {% if user.is_authenticated %}
+              <!-- Logged-in users can update the cart -->
+              <li><i data-product="{{ product.id }}" data-action="add" class="bx bx-cart update_cart"></i></li>
+              {% else %}
+              <!-- Non-logged-in users are redirected to login page -->
+              <li>
+                <a href="{% url 'login' %}">
+                  <i class="bx bx-cart"></i>
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    <section class="pagination">
+      <div class="container">
+        <a href="{% url 'product' %}"><span>1</span></a> <a href="{% url 'product2' %}"><span>2</span></a>
+        <a href="{% url 'product2' %}">
+        <span><i class="bx bx-right-arrow-alt"></i></span></a>
+      </div>
+    </section>
+    {% endblock %}
+    {% block extra_js %}
+    <script src="{% static 'js/index.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+    {% endblock %}
+    

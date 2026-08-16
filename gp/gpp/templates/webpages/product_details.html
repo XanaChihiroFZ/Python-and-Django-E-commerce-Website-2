@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Product{% endblock %}
+    
+  {% block content %}
+  <section class="section product-detail">
+    <div class="details container">
+        <div class="left image-container">
+            <div class="main">
+                <!-- Dynamic product image -->
+                <img src="{{ product.image.url }}" id="zoom" >
+            </div>
+        </div>
+        <div class="right">
+            <!-- Dynamic breadcrumb -->
+            <span>Home/Shop/{{ product.category.name|title }}</span>
+            <!-- Dynamic product name -->
+            <h1>{{ product.name }}</h1>
+            <!-- Dynamic product price -->
+            <div class="price">${{ product.price }}</div>
+            <form class="form">
+                {% if user.is_authenticated %}
+                    <!-- Logged-in users: Use JavaScript to update the cart -->
+                    <button type="button" data-product="{{ product.id }}" data-action="add" class="addCart update_cart btn btn-1">
+                        Add To Cart
+                    </button>
+                {% else %}
+                    <!-- Non-logged-in users: Redirect to login page -->
+                    <a href="{% url 'login' %}?next={{ request.path }}" class="addCart btn btn-1">
+                        Add To Cart
+                    </a>
+                {% endif %}
+            </form>
+            
+            <h3>Product Detail</h3>
+            <!-- Dynamic product description -->
+            <p>{{ product.description }}</p>
+        </div>
+    </div>
+</section>
+  
+  
+    <!-- Latest Products -->
+    <section class="section featured">
+        <div class="top container">
+          <h1>Related Products</h1>
+          <a href="{% url 'product' %}" class="view-more">View more</a>
+        </div>
+        <div class="product-center container">
+          {% for product in random_products %}
+            <div class="product-item">
+                <div class="overlay">
+                    <!-- Dynamic product detail URL -->
+                    <a href="{% url 'product_details' product.id %}" class="product-thumb">
+                        <!-- Dynamic product image -->
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    </a>
+                    {% if product.discount %}
+                    <span class="discount">{{ product.discount }}%</span>
+                    {% endif %}
+                </div>
+                <div class="product-info">
+                    <!-- Dynamic category name -->
+                    <span>{{ product.category.name|upper }}</span>
+                    <!-- Dynamic product name -->
+                    <a href="{% url 'product_details' product.id %}">{{ product.name }}</a>
+                    <!-- Dynamic product price -->
+                    <h4>${{ product.price }}</h4>
+                </div>
+                <ul class="icons">
+                    {% if user.is_authenticated %}
+                    <!-- Logged-in users can update the cart -->
+                    <li><i data-product="{{ product.id }}" data-action="add" class="bx bx-cart update_cart"></i></li>
+                    {% else %}
+                    <!-- Non-logged-in users are redirected to login page -->
+                    <li>
+                      <a href="{% url 'login' %}">
+                        <i class="bx bx-cart"></i>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+            </div>
+            {% endfor %}
+        </div>
+      </section>
+  {% endblock %}
+  {% load static %}
+
+{% block extra_js %}
+    <!-- Load Custom Scripts -->
+    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+    <script src="{% static 'js/index.js' %}"></script>
+
+    <!-- Load jQuery from CDN -->
+    <script
+        src="https://code.jquery.com/jquery-3.4.0.min.js"
+        integrity="sha384-JUMjoW8OzDJw4oFpWIB2Bu/c6768ObEthBMVSiIx4ruBIEdyNSUQAjJNFqT5pnJ6"
+        crossorigin="anonymous"
+    ></script>
+
+    <!-- Load Zoom Plugin -->
+    <script src="{% static 'js/zoomsl.min.js' %}"></script>
+
+    <!-- Custom Initialization Script -->
+    <script>
+      $(document).ready(function () {
+        console.log("Page loaded, initializing zoom...");
+        $("#zoom").imagezoomsl({
+          zoomrange: [4, 4], // Range for zoom level
+        });
+      });
+    </script>
+{% endblock %}
